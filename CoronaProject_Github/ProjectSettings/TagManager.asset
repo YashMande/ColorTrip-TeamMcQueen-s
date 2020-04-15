@@ -8,6 +8,11 @@ TagManager:
   - BlueCar
   - YellowCar
   - OrangeCar
+  - RedLane
+  - BlueLane
+  - GreenLane
+  - YellowLane
+  - WhiteLane
   layers:
   - Default
   - TransparentFX
