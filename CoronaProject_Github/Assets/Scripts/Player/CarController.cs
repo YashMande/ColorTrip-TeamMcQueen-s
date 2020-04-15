@@ -3,82 +3,73 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-//[RequireComponent(typeof(InputManager))]
+
 
 public class CarController : MonoBehaviour
 {
 
-    /* public InputManager iM;
-     public List<WheelCollider> throttleWheels;
-     public List<WheelCollider> steerWheels;
+   
 
-     public float maxTurn;
-     public float strenghtCoeifficient;*/
-
-
+    [Header("WheelColliders")] //Wheel colliders attached to the wheels
     public WheelCollider WheelFL;
     public WheelCollider WheelFR;
     public WheelCollider WheelBL;
     public WheelCollider WheelBR;
 
-
+    [Header("WheelGameObject")] //Wheel gameObject which has wheelcollider
     public GameObject FrontLeftWheel;
     public GameObject FrontRightWheel;
     public GameObject BackLeftWheel;
     public GameObject BackRightWheel;
 
-    public float topSpeed;
-    public float maxTroque;
-    public float maxSteerAngle;
-    public float currentSpeed;
-    public float maxBrakeTorque;
+
+    [Header("Variables")]
+    public float topSpeed; //max speed 
+    public float maxTroque; // how much torque to apply to the wheels
+    public float maxSteerAngle; // steering value
+    public float currentSpeed; //gets current speed
+    public float maxBrakeTorque; //brake force
 
 
-    private float Forward;
-    private float Turn;
-    private float Brake;
+    
+    private float Forward; //Vertical axis
+    private float Turn; // Horiazontal axis
+    private float Brake; 
 
     Rigidbody rb;
 
 
     void Start()
     {
-        //iM = gameObject.GetComponent<InputManager>();
+        
         rb = gameObject.GetComponent<Rigidbody>();
     }
 
   
     void FixedUpdate()
     {
-        /* foreach (WheelCollider wheel in throttleWheels)
-         {
-             wheel.motorTorque = strenghtCoeifficient * Time.deltaTime  * iM.throttle;
-         }
-         foreach (WheelCollider wheel in steerWheels)
-         {
-             wheel.steerAngle = maxTurn * iM.steer ;
-         }*/
+      
 
 
         Forward = Input.GetAxis("Vertical");
         Turn = Input.GetAxis("Horizontal");
         Brake = Input.GetAxis("Jump");
 
-        WheelFL.steerAngle = maxSteerAngle * Turn;
+        WheelFL.steerAngle = maxSteerAngle * Turn; // Steering 
         WheelFR.steerAngle = maxSteerAngle * Turn;
 
-        currentSpeed = 3 * 22 / 7 * WheelBL.radius * WheelBL.rpm * 60 / 1000;
+        currentSpeed = 3 * 22 / 7 * WheelBL.radius * WheelBL.rpm * 60 / 1000; //Formula for speed in kmph
 
         if(currentSpeed < topSpeed)
         {
-            WheelBL.motorTorque = maxTroque * Forward * 3;
+            WheelBL.motorTorque = maxTroque * Forward * 3; //Run the wheels 
             WheelBR.motorTorque = maxTroque * Forward * 3;
             WheelFR.motorTorque = maxTroque * Forward * 3;
             WheelFL.motorTorque = maxTroque * Forward * 3;
 
         }
 
-        WheelBL.brakeTorque = maxTroque * Brake;
+        WheelBL.brakeTorque = maxTroque * Brake; //Brake force applied to the wheels
         WheelBR.brakeTorque = maxTroque * Brake;
         WheelFL.brakeTorque = maxTroque * Brake;
         WheelFR.brakeTorque = maxTroque * Brake;
@@ -88,10 +79,10 @@ public class CarController : MonoBehaviour
 
      void Update()
     {
-        //gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, 0, gameObject.transform.rotation.w);
-        Quaternion frontLeftR;
-        Vector3 frontLeftP;
-        WheelFL.GetWorldPose(out frontLeftP, out frontLeftR);
+       
+        Quaternion frontLeftR; //rotation of wheel collider
+        Vector3 frontLeftP; // position of wheel collider
+        WheelFL.GetWorldPose(out frontLeftP, out frontLeftR); // gets wheel colliders posiiton and rotation
         FrontLeftWheel.transform.position = frontLeftP;
         FrontLeftWheel.transform.rotation = frontLeftR;
 
